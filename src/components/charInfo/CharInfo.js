@@ -2,10 +2,11 @@ import './charInfo.scss';
 import Spinner from '../spinner/spinner';
 import ErrorMessenge from '../errorMessenge/errorMessenge';
 import useMarvelService from '../../services/MarvelService';
-import Skeleton from '../skeleton/Skeleton';
 import PropTypes from 'prop-types'
-
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import Skeleton from '../skeleton/Skeleton';
+
 
 const CharInfo = (props) => {
 
@@ -55,7 +56,8 @@ const CharInfo = (props) => {
 }
 
 const View = ({ char }) => {
-    const { name, thumbnail, wiki, homepage, description, comics } = char;
+    const { name, thumbnail, wiki, homepage, description, comics, comicsUrls } = char;
+    console.log(comicsUrls)
     const classImg = (thumbnail === 'http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg') ? "char__img-default" : '';
     return (
         <>
@@ -82,9 +84,11 @@ const View = ({ char }) => {
                 {
                     comics.map((item, i) => {
                         if (i > 9) return null;
+                        const url = item.resourceURI
                         return (
-                            <li key={i} className="char__comics-item">
-                                {item.name}
+                            <li key={i} className="char__comics-item" style={{ 'fontWeight': '600' }}
+                            >
+                                {item.name},{url}
                             </li>
                         )
                     })

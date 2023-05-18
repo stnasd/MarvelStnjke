@@ -20,6 +20,7 @@ const useMarvelService = () => {
     const getCharacter = async (id) => {
         const res = await request(`${_apiBase}characters/${id}?/&${_apiKey}`)
         clearError()
+        console.log(res)
         return _transformCharacter(res.data.results[0])
     }
 
@@ -27,6 +28,11 @@ const useMarvelService = () => {
         const res = await request(`${_apiBase}comics?limit=8&offset=${offset}&${_apiKey}`)
         clearError()
         return res.data.results.map(_transformComics)
+    }
+    const getComic = async (id) => {
+        const res = await request(`${_apiBase}comics/${id}?/&${_apiKey}`)
+        clearError()
+        return _transformComics(res.data.results[0])
     }
 
     const _transformCharacter = (char) => {
@@ -38,18 +44,24 @@ const useMarvelService = () => {
             wiki: char.urls[1].url,
             id: char.id,
             comics: char.comics.items,
+            comicsUrls: char.comics.items.resourceURI,
         }
     }
 
     const _transformComics = (item) => {
         return {
             name: item.title,
-            thumbnail: item.thumbnail.path + '.' + item.thumbnail.extension,
-            price: item.prices[0].price,
+            description: item.description || "There is no description",
+            pageCount: item.pageCount
+                ? `${item.pageCount} pages`
+                : "No information about the number of pages",
+            language: item.textObjects[0]?.language || "en-us",
+            thumbnail: item.thumbnail.path + '.' + item.thumbnail.extension || null,
+            price: item.prices[0].price ? `${item.prices[0].price} €` : "not available",
             id: item.id
         }
     }
-    return { loading, error, getAllCharacters, getCharacter, clearError, getAllComics }
+    return { loading, error, getAllCharacters, getCharacter, clearError, getAllComics, getComic }
 }
 
 

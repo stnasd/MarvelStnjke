@@ -3,10 +3,11 @@ import Spinner from '../spinner/spinner';
 import useMarvelService from '../../services/MarvelService';
 import { useEffect, useState } from 'react';
 import ErrorMessenge from '../errorMessenge/errorMessenge';
+import { Link } from "react-router-dom"
 
 const ComicsList = () => {
     const [data, setData] = useState([]);
-    const [offset, setOffset] = useState(216);
+    const [offset, setOffset] = useState(220);
     const [newComics, setNewComics] = useState(false);
     const [comicsEnded, setComicsEnded] = useState(false);
 
@@ -39,17 +40,17 @@ const ComicsList = () => {
     }
 
 
-    const items = data.map((item) => {
+    const items = data.map((item, i) => {
         const { id, thumbnail, name, price } = item
         const truePrice = price === 0 ? 'Price not known' : price;
 
         return (
-            <li key={id} alt={name} className="comics__item" >
-                <a href="#">
+            <li key={i} alt={name} className="comics__item" >
+                <Link to={`/comics/${id}`}>
                     <img src={thumbnail} alt="ultimate war" className="comics__item-img" />
                     <div className="comics__item-name">{name}</div>
                     <div className="comics__item-price">{truePrice}</div>
-                </a>
+                </Link>
             </li>
         )
     })
