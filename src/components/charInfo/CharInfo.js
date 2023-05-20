@@ -4,7 +4,7 @@ import ErrorMessenge from '../errorMessenge/errorMessenge';
 import useMarvelService from '../../services/MarvelService';
 import PropTypes from 'prop-types'
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import Skeleton from '../skeleton/Skeleton';
 
 
@@ -84,12 +84,13 @@ const View = ({ char }) => {
                 {
                     comics.map((item, i) => {
                         if (i > 9) return null;
-                        const url = item.resourceURI
+                        const url = item.resourceURI.match(/\d{2,6}/)
                         return (
-                            <li key={i} className="char__comics-item" style={{ 'fontWeight': '600' }}
+                            <Link key={i} className="char__comics-item" style={{ 'fontWeight': '600', }}
+                                to={`/comics/${url[0]}`}
                             >
-                                {item.name},{url}
-                            </li>
+                                {item.name}
+                            </Link>
                         )
                     })
                 }
