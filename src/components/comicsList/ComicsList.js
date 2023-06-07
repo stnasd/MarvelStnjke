@@ -39,7 +39,7 @@ const ComicsList = () => {
         }
 
         setData([...data, ...newComics]);
-        setOffset(offset => offset + 8);
+        setOffset(offset => offset + 16);
         setComicsEnded(ended)
     }
 

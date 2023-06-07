@@ -10,19 +10,36 @@ import {
 
 
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
+
+const setContent = (process, Component, newCharsLoading) => {
+    switch (process) {
+        case "waiting":
+            return <Spinner />
+            break;
+        case "loading":
+            return newCharsLoading ? <Component /> : <Spinner />
+            break;
+        case "confirmed":
+            return <Component />
+            break;
+        case "error":
+            return <ErrorMessenge />
+            break;
+        default:
+            throw new Error('Unxpected process state')
+    }
+}
 
 const CharList = (props) => {
 
     const [chars, setChars] = useState([]);
-    // const [loading, setLoading] = useState(true);
-    // const [error, setError] = useState(false);
     const [newCharsLoading, setNewCharsLoading] = useState(false);
     const [offset, setOffset] = useState(200);
     const [charsEnded, setCharEnded] = useState(false);
 
 
-    const { error, loading, getAllCharacters } = useMarvelService();
+    const { getAllCharacters, loading, error, process, setProcess } = useMarvelService();
 
     useEffect(() => {
         onRequest(offset, true);
@@ -32,6 +49,7 @@ const CharList = (props) => {
         initial ? setNewCharsLoading(false) : setNewCharsLoading(true);
         getAllCharacters(offset)
             .then(onCharsLoaded)
+            .then(() => setProcess('confirmed'));
     }
 
 
@@ -97,24 +115,25 @@ const CharList = (props) => {
             </TransitionGroup>
         </ul>
     }
-    const items = charElements(chars);
+    // const items = charElements(chars);
 
-    const errorMessage = error ? <ErrorMessenge /> : null;
-    const spinner = loading && !newCharsLoading ? <Spinner /> : null;
-    const offButton = newCharsLoading ? ':disabled' : 'inner';
+    // const spinner = loading && !newCharsLoading ? <Spinner /> : null;
+    // const errorMessage = error ? <ErrorMessenge /> : null;
+    // const offButton = newCharsLoading ? { 'display': 'disabled' } : null;
 
+    const elements = useMemo(() => {
+        return setContent(process, () => charElements(chars), newCharsLoading)
+        // eslint-disable-next-line
+    }, [process])
 
     return (
         <div className="char__list">
-            {errorMessage}
-            {spinner}
-            {items}
+            {elements}
             <button className="button button__main button__long"
                 onClick={() => onRequest(offset)}
                 disabled={newCharsLoading}
-                style={{ 'display': charsEnded ? 'none' : 'block' }}
             >
-                <div style={{ offButton }} className="inner">load more</div>
+                <div className="inner">load more</div>
             </button >
         </div >
     )
