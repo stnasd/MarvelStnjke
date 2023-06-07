@@ -1,4 +1,3 @@
-import './charInfo.scss';
 import Spinner from '../spinner/spinner';
 import ErrorMessenge from '../errorMessenge/errorMessenge';
 import useMarvelService from '../../services/MarvelService';
@@ -6,6 +5,12 @@ import PropTypes from 'prop-types'
 import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import Skeleton from '../skeleton/Skeleton';
+import CharSerch from '../charSerch/CharSerch';
+
+import './charInfo.scss';
+
+
+
 
 
 const CharInfo = (props) => {
@@ -46,12 +51,14 @@ const CharInfo = (props) => {
     const content = !(loading || error || !char) ? <View char={char} /> : null;
 
     return (
-        <div className="char__info">
-            {skeleton}
-            {errorMessenge}
-            {spinner}
-            {content}
-        </div>
+        <>
+            <div className="char__info">
+                {skeleton}
+                {errorMessenge}
+                {spinner}
+                {content}
+            </div>
+        </>
     )
 }
 

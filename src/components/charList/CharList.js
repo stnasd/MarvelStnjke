@@ -3,6 +3,10 @@ import useMarvelService from '../../services/MarvelService';
 import Spinner from '../spinner/spinner';
 import ErrorMessenge from '../errorMessenge/errorMessenge';
 import PropTypes from 'prop-types';
+import {
+    CSSTransition,
+    TransitionGroup,
+} from 'react-transition-group';
 
 
 
@@ -60,27 +64,37 @@ const CharList = (props) => {
         const items = arr.map((item, i) => {
             const { thumbnail, name, id } = item;
             const classImg = (thumbnail === 'http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg') ? "char__img-default" : '';
-            return <li className="char__item"
-                ref={el => itemRefs.current[i] = el}
-                key={id}
-                tabIndex={0}
-                onKeyDown={(e) => {
-                    if (e.key === ' ' || e.key === "Enter") {
-                        props.onSelectedChar(id);
-                        focusItem(i);
-                    }
-                }}
-                onClick={() => {
-                    props.onSelectedChar(id);
-                    focusItem(i);
-                }}
-            >
-                <img src={thumbnail} alt={name} className={classImg} />
-                <div className="char__name">{name}</div>
-            </li>
+            return (
+                <CSSTransition
+                    classNames="char__item"
+                    timeout={700}
+                    key={id}
+                >
+                    <li className="char__item"
+                        ref={el => itemRefs.current[i] = el}
+                        key={id}
+                        tabIndex={0}
+                        onKeyDown={(e) => {
+                            if (e.key === ' ' || e.key === "Enter") {
+                                props.onSelectedChar(id);
+                                focusItem(i);
+                            }
+                        }}
+                        onClick={() => {
+                            props.onSelectedChar(id);
+                            focusItem(i);
+                        }}
+                    >
+                        <img src={thumbnail} alt={name} className={classImg} />
+                        <div className="char__name">{name}</div>
+                    </li>
+                </CSSTransition>
+            )
         })
         return <ul className="char__grid">
-            {items}
+            <TransitionGroup component={null}>
+                {items}
+            </TransitionGroup>
         </ul>
     }
     const items = charElements(chars);

@@ -4,6 +4,10 @@ import useMarvelService from '../../services/MarvelService';
 import { useEffect, useState } from 'react';
 import ErrorMessenge from '../errorMessenge/errorMessenge';
 import { Link } from "react-router-dom"
+import {
+    CSSTransition,
+    TransitionGroup,
+} from 'react-transition-group';
 
 const ComicsList = () => {
     const [data, setData] = useState([]);
@@ -45,13 +49,19 @@ const ComicsList = () => {
         const truePrice = price === 0 ? 'Price not known' : price;
 
         return (
-            <li key={i} alt={name} className="comics__item" >
-                <Link to={`/comics/${id}`}>
-                    <img src={thumbnail} alt="ultimate war" className="comics__item-img" />
-                    <div className="comics__item-name">{name}</div>
-                    <div className="comics__item-price">{truePrice}</div>
-                </Link>
-            </li>
+            <CSSTransition
+                classNames="comics__item"
+                timeout={700}
+                key={id}
+            >
+                <li key={i} alt={name} className="comics__item" >
+                    <Link to={`/comics/${id}`}>
+                        <img src={thumbnail} alt="ultimate war" className="comics__item-img" />
+                        <div className="comics__item-name">{name}</div>
+                        <div className="comics__item-price">{truePrice}</div>
+                    </Link>
+                </li>
+            </CSSTransition>
         )
     })
 
@@ -63,7 +73,9 @@ const ComicsList = () => {
             {ifError}
             {spinner}
             <ul className="comics__grid">
-                {items}
+                <TransitionGroup component={null}>
+                    {items}
+                </TransitionGroup>
             </ul>
             <button onClick={() => onRequest(offset)}
                 style={hiddenButton}

@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
-
-import './randomChar.scss';
 import mjolnir from '../../resources/img/mjolnir.png';
 import useMarvelService from '../../services/MarvelService';
 import Spinner from '../spinner/spinner';
 import ErrorMessenge from '../errorMessenge/errorMessenge';
+import { Link } from 'react-router-dom';
+
+import './randomChar.scss';
 
 const RandomChar = () => {
     const [char, setChar] = useState({});
@@ -38,6 +39,7 @@ const RandomChar = () => {
     const spinner = loading ? <Spinner /> : null;
     const content = !(loading || error) ? <View char={char} /> : null;
 
+
     return (
         <div className="randomchar">
             {errorMessenge}
@@ -61,7 +63,7 @@ const RandomChar = () => {
 }
 
 const View = ({ char }) => {
-    const { name, description, thumbnail, homepage, wiki } = char;
+    const { name, description, thumbnail, homepage, wiki, id } = char;
     const verificationPageUrl = 'http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg';
     const classImg = (verificationPageUrl === thumbnail) ? '-default' : '';
     return (
@@ -73,15 +75,15 @@ const View = ({ char }) => {
                     {description}
                 </p>
                 <div className="randomchar__btns">
-                    <a href={homepage} className="button button__main">
+                    <Link to={`/characters/${id}`} className="button button__main">
                         <div className="inner">homepage</div>
-                    </a>
+                    </Link>
                     <a href={wiki} className="button button__secondary">
                         <div className="inner">Wiki</div>
                     </a>
                 </div>
             </div>
-        </div>
+        </div >
     )
 }
 
