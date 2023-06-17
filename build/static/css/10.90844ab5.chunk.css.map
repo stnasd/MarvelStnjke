@@ -1,0 +1,1 @@
+{"version":3,"sources":["webpack://src/components/errorMessenge/errorMessenge.css"],"names":[],"mappings":"AAAA,WACI,YAAa,CACb,WAAY,CACZ,kBAAmB,CACnB,aAAc,CACd,aACJ","file":"10.90844ab5.chunk.css","sourcesContent":[".error-img {\r\n    height: 250px;\r\n    width: 250px;\r\n    object-fit: contain;\r\n    margin: 0 auto;\r\n    display: block;\r\n}\r\n"]}
